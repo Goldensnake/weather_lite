@@ -11,7 +11,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Created by juliens on 12/10/2017.
  */
-
 public class ActivityUtils {
     /**
      * From the blueprint android

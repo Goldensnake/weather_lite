@@ -1,40 +1,70 @@
 package com.juliens.weatherlite.weatherList;
 
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.OnLifecycleEvent;
-import android.os.Bundle;
-import android.util.Log;
+import android.support.annotation.NonNull;
 
-import com.juliens.weatherlite.BasePresenter;
+import com.juliens.weatherlite.FragmentCallback;
+import com.juliens.weatherlite.data.Temp;
+import com.juliens.weatherlite.data.WeatherData;
+import com.juliens.weatherlite.data.WeatherList;
+import com.juliens.weatherlite.data.network.Service;
+import com.orhanobut.logger.Logger;
 
-import static android.content.ContentValues.TAG;
+import io.reactivex.disposables.Disposable;
 
 /**
- * Created by juliens on 22/10/2017.
+ * Created by juliens on 22/10/2017. Update on 26/05/2018
  */
+public class WeatherListPresenter implements WeatherListContract.Presenter {
+    @NonNull
+    private final WeatherListContract.View mWeatherView;
+    private Disposable mWeatherNetworkCall;
+    private FragmentCallback callback;
 
-public class WeatherListPresenter extends BasePresenter<WeatherListContract.View> implements WeatherListContract.Presenter {
-    private Bundle viewStateBundle = getStateBundle();
-
-    @OnLifecycleEvent(value = Lifecycle.Event.ON_CREATE)
-    protected void onCreate() {
-        /*if (viewStateBundle.getBoolean(PROGRESS_BAR_STATE_KEY)) {
-            if (isViewAttached())
-                getView().showProgress();
-        }*/
-    }
-
-    @OnLifecycleEvent(value = Lifecycle.Event.ON_DESTROY)
-    protected void onDestroy() {
-        if (isViewAttached()){
-            //getView()
-        }
+    public WeatherListPresenter(@NonNull WeatherListContract.View weatherView) {
+        mWeatherView = weatherView;
+        mWeatherView.setPresenter(this);
 
     }
 
     @Override
-    public void onPresenterDestroy() {
-        super.onPresenterDestroy();
-        Log.d(TAG, "Presenter destroyed");
+    public void subscribe() {
+        loadWeather();
+    }
+
+    @Override
+    public void unsubscribe() {
+        mWeatherNetworkCall.dispose();
+    }
+
+    @Override
+    public void loadWeather() {
+        mWeatherView.setLoadingIndicator(true);
+        mWeatherNetworkCall = Service.getInstance().getListWeather("Paris", Temp.UnitFormat.METRIC, 5).subscribe(this::receiveWeatherDataList, this::receiveError);
+        Logger.d("Load network weather data");
+    }
+
+    @Override
+    public void openWeatherDetails(@NonNull WeatherData weatherData) {
+        callback.loadDetailWeather(weatherData);
+    }
+
+    public void setOnItemSelected(FragmentCallback callback) {
+        this.callback = callback;
+    }
+
+    private void receiveWeatherDataList(WeatherList weatherList) {
+        mWeatherView.setLoadingIndicator(false);
+        if (weatherList.getCod().equals("200"))
+            mWeatherView.showWeatherList(weatherList.getList());
+        else {
+            mWeatherView.setLoadingIndicator(false);
+            mWeatherView.showLoadingWeatherError(weatherList.getMessage());
+        }
+    }
+
+    private void receiveError(Throwable throwable) {
+        Logger.e("Reception error weather data: " + throwable.getMessage());
+        mWeatherView.setLoadingIndicator(false);
+        mWeatherView.showLoadingWeatherError(throwable.toString());
     }
 }
