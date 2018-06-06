@@ -51,7 +51,7 @@ public class WeatherListFragment extends Fragment implements WeatherListContract
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Logger.d("Init fragment");
-        listAdapter = new WeatherListAdapter(new ArrayList<>(0));
+        listAdapter = new WeatherListAdapter(getContext(), new ArrayList<>(0));
     }
 
     @Override

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.juliens.weatherlite.WeatherActivity">
+    tools:context="com.juliens.weatherlite.weatherList.WeatherListActivity">
 
     <FrameLayout
         android:id="@+id/contentFrame"

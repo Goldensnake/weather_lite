@@ -21,6 +21,11 @@ android {
         targetCompatibility 1.8
         sourceCompatibility 1.8
     }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
 }
 
 dependencies {
@@ -43,5 +48,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.7.1'
     implementation 'com.orhanobut:logger:2.2.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+
+    testImplementation 'org.mockito:mockito-core:2.18.3'
     testImplementation 'junit:junit:4.12'
 }

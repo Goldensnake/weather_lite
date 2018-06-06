@@ -40,7 +40,7 @@ public class WeatherListPresenter implements WeatherListContract.Presenter {
     public void loadWeather() {
         mWeatherView.setLoadingIndicator(true);
         mWeatherNetworkCall = Service.getInstance().getListWeather("Paris", Temp.UnitFormat.METRIC, 5).subscribe(this::receiveWeatherDataList, this::receiveError);
-        Logger.d("Load network weather data");
+        Logger.d("toto");
     }
 
     @Override
@@ -56,10 +56,8 @@ public class WeatherListPresenter implements WeatherListContract.Presenter {
         mWeatherView.setLoadingIndicator(false);
         if (weatherList.getCod().equals("200"))
             mWeatherView.showWeatherList(weatherList.getList());
-        else {
-            mWeatherView.setLoadingIndicator(false);
+        else
             mWeatherView.showLoadingWeatherError(weatherList.getMessage());
-        }
     }
 
     private void receiveError(Throwable throwable) {

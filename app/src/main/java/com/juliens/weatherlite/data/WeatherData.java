@@ -7,11 +7,12 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by juliens on 26/05/2018
- * <p>
+ *
  * From http://www.jsonschema2pojo.org/
  */
 public class WeatherData implements Parcelable {
@@ -45,7 +46,7 @@ public class WeatherData implements Parcelable {
     private Integer humidity;
     @SerializedName("weather")
     @Expose
-    private List<Weather> weather = null;
+    private List<Weather> weather = new ArrayList<>();
     @SerializedName("speed")
     @Expose
     private Double speed;
@@ -64,7 +65,7 @@ public class WeatherData implements Parcelable {
         this.temp = ((Temp) in.readValue((Temp.class.getClassLoader())));
         this.pressure = ((Double) in.readValue((Double.class.getClassLoader())));
         this.humidity = ((Integer) in.readValue((Integer.class.getClassLoader())));
-        in.readList(this.weather, (com.juliens.weatherlite.data.Weather.class.getClassLoader()));
+        in.readList(this.weather, (Weather.class.getClassLoader()));
         this.speed = ((Double) in.readValue((Double.class.getClassLoader())));
         this.deg = ((Integer) in.readValue((Integer.class.getClassLoader())));
         this.clouds = ((Integer) in.readValue((Integer.class.getClassLoader())));
@@ -107,6 +108,10 @@ public class WeatherData implements Parcelable {
 
     public void setDt(Integer dt) {
         this.dt = dt;
+    }
+
+    public Long getDtInMillis() {
+        return dt.longValue() * 1000;
     }
 
     public Temp getTemp() {

@@ -7,6 +7,4 @@ import com.juliens.weatherlite.data.WeatherData;
  */
 public interface FragmentCallback {
     void loadDetailWeather(WeatherData weatherData);
-
-    void showWeatherList();
 }

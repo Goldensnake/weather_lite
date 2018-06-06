@@ -9,7 +9,7 @@ import com.juliens.weatherlite.data.WeatherData;
  */
 public class WeatherDetailPresenter implements WeatherDetailContract.Presenter {
     private WeatherDetailContract.View mWeatherView;
-    private WeatherData weatherData;
+    private WeatherData mWeatherData;
 
     public WeatherDetailPresenter(@NonNull WeatherDetailContract.View weatherView) {
         mWeatherView = weatherView;
@@ -18,7 +18,7 @@ public class WeatherDetailPresenter implements WeatherDetailContract.Presenter {
 
     @Override
     public void subscribe() {
-
+        mWeatherView.showDetail(mWeatherData);
     }
 
     @Override
@@ -32,8 +32,7 @@ public class WeatherDetailPresenter implements WeatherDetailContract.Presenter {
     }
 
     @Override
-    public void setData(WeatherData weatherData) {
-        this.weatherData = weatherData;
-        mWeatherView.showDetail(weatherData);
+    public void setData(@NonNull WeatherData weatherData) {
+        mWeatherData = weatherData;
     }
 }

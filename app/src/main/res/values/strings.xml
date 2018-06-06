@@ -29,4 +29,6 @@
     <string name="format_humidity">
         <xliff:g id="humidity">%1.0f</xliff:g> %%
     </string>
+    <string name="title_activity_weather_detail">WeatherDetailActivity</string>
+    <string name="action_settings">Settings</string>
 </resources>

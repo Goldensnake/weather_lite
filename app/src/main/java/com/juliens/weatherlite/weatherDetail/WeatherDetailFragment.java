@@ -10,8 +10,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.juliens.weatherlite.R;
 import com.juliens.weatherlite.data.WeatherData;
+
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,19 +52,13 @@ public class WeatherDetailFragment extends Fragment implements WeatherDetailCont
         return new WeatherDetailFragment();
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_weather_detail, container, false);
         ButterKnife.bind(this, root);
 
-        return super.onCreateView(inflater, container, savedInstanceState);
+        return root;
     }
 
     @Override
@@ -83,8 +80,19 @@ public class WeatherDetailFragment extends Fragment implements WeatherDetailCont
 
     @Override
     public void showDetail(WeatherData data) {
-        tvDate.setText("");
-        tvLowTemperature.setText(data.getTemp().getMin());
-        tvHighTemperature.setText(data.getTemp().getMax());
+        if (data != null) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(data.getDtInMillis());
+            tvDate.setText(calendar.getTime().toString());
+            tvWeatherDescription.setText(data.getWeather().get(0).getDescription());
+            tvHighTemperature.setText(String.valueOf(data.getTemp().getMax()));
+            tvLowTemperature.setText(String.valueOf(data.getTemp().getMin()));
+            tvHumidity.setText(String.valueOf(data.getHumidity().toString()));
+            tvPressure.setText(String.valueOf(data.getPressure()));
+            tvWindMeasurement.setText(String.valueOf(data.getSpeed()));
+            Glide.with(getContext())
+                    .load("http://openweathermap.org/img/w/" + data.getWeather().get(0).getIcon() + ".png")
+                    .into(ivWeatherIcon);
+        }
     }
 }

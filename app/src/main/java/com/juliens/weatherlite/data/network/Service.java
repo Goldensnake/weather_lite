@@ -1,5 +1,7 @@
 package com.juliens.weatherlite.data.network;
 
+import android.support.annotation.NonNull;
+
 import com.juliens.weatherlite.data.Temp;
 import com.juliens.weatherlite.data.WeatherList;
 
@@ -43,8 +45,8 @@ public class Service {
         return INSTANCE;
     }
 
-    public Observable<WeatherList> getListWeather(String town, Temp.UnitFormat unitFormat, int days) {
-        return networkService.getWeatherForTown(town, Temp.UnitFormat.IMPERIAL.getValue(), 7, "8194ea842a9aef80a798c8ac0c320ec4")
+    public Observable<WeatherList> getListWeather(@NonNull String town, @NonNull Temp.UnitFormat unitFormat, int days) {
+        return networkService.getWeatherForTown(town, unitFormat.getValue(), days, "8194ea842a9aef80a798c8ac0c320ec4")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
